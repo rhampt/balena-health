@@ -1,6 +1,6 @@
-FROM balenablocks/bluetooth:%%BALENA_MACHINE_NAME%%
+FROM balenalib/%%BALENA_MACHINE_NAME%%-ubuntu-node:14.18.1-bionic
 
-RUN install_packages nodejs npm
+RUN install_packages bluetooth bluez libbluetooth-dev libudev-dev
 
 # Defines our working directory in container
 WORKDIR /app
@@ -14,6 +14,8 @@ RUN JOBS=MAX npm install --production --unsafe-perm && npm cache verify && rm -r
 
 # This will copy all files in our root to the working directory in the container (including start.sh)
 COPY . ./
+
+COPY node-ble.conf /etc/dbus-1/system.d/
 
 RUN chmod +x start.sh
 

@@ -1,17 +1,19 @@
 version: '2'
 
 services:
-
   data-collector:
     build: ./data-collector
     restart: on-failure
     network_mode: host
+    privileged: true
     cap_add:
       - NET_ADMIN
-    environment: 
+    environment:
       - BLUETOOTH_DEVICE_NAME=balenaHealth
+      - DBUS_SYSTEM_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket
     labels:
-      io.balena.features.dbus: 1
+      io.balena.features.dbus: '1'
+      io.balena.features.kernel-modules: '1'
 
   # mqtt-broker:
   #   build: ./mqtt-broker
