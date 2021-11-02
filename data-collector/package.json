@@ -1,0 +1,23 @@
+{
+  "name": "data-collector-node",
+  "version": "0.0.1",
+  "description": "Backend for the balenaHealth project",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rhampt/balena-health.git"
+  },
+  "author": "Ryan Hampton <ryanh@balena.io>",
+  "license": "Apache-2.0",
+  "engineStrict": true,
+  "engines": {
+    "node": ">=14.18.1",
+    "npm": ">=6.14.15"
+  },
+  "dependencies": {
+    "winston": "^3.3.3"
+  }
+}
