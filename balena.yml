@@ -1,0 +1,24 @@
+name: balenaHealth
+type: sw.application
+description: >-
+  Build a heart rate monitor with your Raspberry Pi.
+fleetcta: Sounds good
+post-provisioning: >-
+  ## TBD
+assets:
+  repository:
+    type: blob.asset
+    data:
+      url: 'https://github.com/rhampt/balena-health'
+  logo:
+    type: blob.asset
+    data:
+      url: >-
+        https://github.com/rhampt/balena-health/logo.png
+data:
+  applicationEnvironmentVariables:
+    - TEST: 1
+  defaultDeviceType: raspberry-pi4-64
+  supportedDeviceTypes:
+    - raspberrypi4-64
+version: 0.0.1

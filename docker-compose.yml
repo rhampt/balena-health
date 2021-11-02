@@ -1,0 +1,27 @@
+version: '2'
+
+volumes:
+  shared:
+
+services:
+
+  data-collector:
+    build: ./data-collector
+    restart: on-failure
+    network_mode: host
+    cap_add:
+      - NET_ADMIN
+    labels:
+      io.balena.features.dbus: 1
+
+  # mqtt-broker:
+  #   build: ./mqtt-broker
+
+  # connector:
+  #   build: ./connector
+
+  # influx-db:
+  #   build: ./influx-db
+
+  # dashboard:
+  #   build: ./dashboard

@@ -102,3 +102,8 @@ dist
 
 # TernJS port file
 .tern-port
+
+### Ryan Custom
+.DS_Store
+meta.json
+build

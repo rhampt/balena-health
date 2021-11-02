@@ -1,0 +1,6 @@
+FROM balenablocks/bluetooth
+
+WORKDIR /app
+
+COPY start.sh /app
+CMD [ "/bin/bash", "/app/start.sh" ]
