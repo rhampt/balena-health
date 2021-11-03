@@ -6,7 +6,7 @@ volumes:
 
 services:
   data-collector:
-    build: ./data-collector-node
+    build: ./data-collector
     restart: on-failure
     network_mode: host
     privileged: true
