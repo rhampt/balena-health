@@ -1,5 +1,9 @@
 version: '2'
 
+volumes:
+  collected-data:
+  dashboard-data:
+
 services:
   data-collector:
     build: ./data-collector-node
@@ -13,15 +17,33 @@ services:
     labels:
       io.balena.features.dbus: '1'
       io.balena.features.kernel-modules: '1'
+      io.balena.features.supervisor-api: '1'
 
-  # mqtt-broker:
-  #   build: ./mqtt-broker
+  mqtt:
+    image: eclipse-mosquitto:1.6.15
+    restart: always
+    ports:
+      - '1883:1883'
 
   # connector:
-  #   build: ./connector
+  #   image: balenablocks/connector
+  #   restart: always
+  #   labels:
+  #     io.balena.features.balena-api: '1'
+  #   privileged: true
+  #   ports:
+  #     - '8080'
 
-  # influx-db:
-  #   build: ./influx-db
+  # influxdb:
+  #   image: arm32v7/influxdb@sha256:2fed9b09a672cab330ac3ea1f03616e6821f2235bda64d549f605ef0d7081911
+  #   restart: always
+  #   volumes:
+  #     - 'sense-data:/var/lib/influxdb'
 
   # dashboard:
-  #   build: ./dashboard
+  #   image: balenablocks/dashboard
+  #   restart: always
+  #   volumes:
+  #     - 'dashboard-data:/data'
+  #   ports:
+  #     - '80'
