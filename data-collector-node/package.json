@@ -4,7 +4,7 @@
   "description": "Backend for the balenaHealth project",
   "main": "index.js",
   "scripts": {
-    "start": "node nobleattempt.js"
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -18,8 +18,6 @@
     "npm": ">=6.14.15"
   },
   "dependencies": {
-    "noble": "^1.9.1",
-    "node-ble": "^1.5.0",
     "winston": "^3.3.3"
   }
 }

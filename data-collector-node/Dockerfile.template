@@ -15,8 +15,6 @@ RUN JOBS=MAX npm install --production --unsafe-perm && npm cache verify && rm -r
 # This will copy all files in our root to the working directory in the container (including start.sh)
 COPY . ./
 
-COPY node-ble.conf /etc/dbus-1/system.d/
-
 RUN chmod +x start.sh
 
 CMD [ "/bin/bash", "/app/start.sh"]
