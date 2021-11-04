@@ -17,7 +17,7 @@ services:
     labels:
       io.balena.features.dbus: '1'
       io.balena.features.kernel-modules: '1'
-      io.balena.features.supervisor-api: '1'
+      io.balena.features.supervisor-api: '1' # necessary to discover services in local mode
 
   mqtt:
     image: eclipse-mosquitto:1.6.15
@@ -25,20 +25,19 @@ services:
     ports:
       - '1883:1883'
 
-  # connector:
-  #   image: balenablocks/connector
-  #   restart: always
-  #   labels:
-  #     io.balena.features.balena-api: '1'
-  #   privileged: true
-  #   ports:
-  #     - '8080'
+  connector:
+    image: balenablocks/connector:latest
+    restart: always
+    labels:
+      io.balena.features.balena-api: '1' # necessary to discover services
+      io.balena.features.supervisor-api: '1' # necessary to discover services in local mode
+    privileged: true
 
   # influxdb:
   #   image: arm32v7/influxdb@sha256:2fed9b09a672cab330ac3ea1f03616e6821f2235bda64d549f605ef0d7081911
   #   restart: always
   #   volumes:
-  #     - 'sense-data:/var/lib/influxdb'
+  #     - 'collected-data:/var/lib/influxdb'
 
   # dashboard:
   #   image: balenablocks/dashboard

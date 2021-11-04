@@ -1,4 +1,4 @@
-![logo](https://github.com/rhampt/balena-health/logo.png)
+![logo](https://raw.githubusercontent.com/rhampt/balena-health/main/images/spash.png)
 
 **This is a starter balenaHub project that allows users to monitor heart rate from a Polar H10 device. Future enhancements will be to support health and well-being.**
 
@@ -24,7 +24,7 @@ TBD
 
 ## Contributing
 
-Do you want to help make balenaHealth better? Take a look at our [Contributing Guide](CONTRIBUTING). 
+Do you want to help make balenaHealth better? Take a look at our [Contributing Guide](CONTRIBUTING).
 
 ## License
 
