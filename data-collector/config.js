@@ -15,22 +15,17 @@ const gatttoolArgs = [
   '--listen',
 ];
 
-const supervisorAddr = process.env.BALENA_SUPERVISOR_ADDRESS || '';
-const supervisorApiKey = process.env.BALENA_SUPERVISOR_API_KEY || '';
-let fleetName = process.env.BALENA_APP_NAME || '';
-
-// TODO: Figure out how to run the mqtt service in local mode to avoid this
-if (fleetName === 'localapp') fleetName = process.env.FLEET_NAME || 'Home-MS-2';
+const fleetName = process.env.BALENA_APP_NAME || '';
 
 const config = {
   h10MacAddr: h10MacAddr,
-  gatttoolArgs: gatttoolArgs,
-  supervisorAddr: supervisorAddr,
-  supervisorApiKey: supervisorApiKey,
+  supervisorAddr: process.env.BALENA_SUPERVISOR_ADDRESS || '',
+  supervisorApiKey: process.env.BALENA_SUPERVISOR_API_KEY || '',
   fleetName: fleetName,
+  isLocalMode: fleetName === 'localapp',
   restartTimeCheckInSecs: 30,
 };
 
 logger.info('Applying Config: ' + JSON.stringify(config));
 
-module.exports = config;
+module.exports = { config, gatttoolArgs };

@@ -1,5 +1,5 @@
 const logger = require('./logger');
-const config = require('./config');
+const { config, gatttoolArgs } = require('./config');
 const { sleep, getMqttClient, isMqttBrokerActive } = require('./utils');
 
 const { spawn } = require('child_process');
@@ -30,7 +30,7 @@ let gatttoolHeartBeat = setTimeout(restartBpmMonitor, config.restartTimeCheckInS
 
 const readBPM = async () => {
   logger.info('Attempting to read your HR BPM');
-  gatttool = spawn('gatttool', config.gatttoolArgs);
+  gatttool = spawn('gatttool', gatttoolArgs);
 
   const rl = readline.createInterface({ input: gatttool.stdout });
   rl.on('line', (line) => {

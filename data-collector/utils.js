@@ -1,5 +1,5 @@
 const logger = require('./logger');
-const config = require('./config');
+const { config } = require('./config');
 const axios = require('axios').default;
 const mqtt = require('mqtt');
 
@@ -10,9 +10,18 @@ const sleep = (ms) => {
 };
 
 const isMqttBrokerActive = async () => {
-  const url = `${config.supervisorAddr}/v2/applications/state?apikey=${config.supervisorApiKey}`;
-  const response = await axios.get(url);
-  const services = response.data[config.fleetName].services;
+  let services = undefined;
+
+  if (config.isLocalMode) {
+    const url = `${config.supervisorAddr}/v2/local/target-state`;
+    const response = await axios.get(url);
+    services = response?.data?.state?.local?.apps['1'].services;
+  } else {
+    const url = `${config.supervisorAddr}/v2/applications/state?apikey=${config.supervisorApiKey}`;
+    const response = await axios.get(url);
+    services = response.data[config.fleetName].services;
+  }
+
   if (Object.keys(services).includes('mqtt')) {
     logger.debug('The mqtt service is active; data will be routed');
     return true;
