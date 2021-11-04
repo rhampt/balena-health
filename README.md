@@ -21,11 +21,33 @@ Your desktop RPi application will update the attached E-Ink display every 30 sec
 
 ## Setup and Configuration
 
-TBD
+### Equipment
+
+- Heart Sensor: [Polar H10](https://www.polar.com/us-en/products/accessories/h10_heart_rate_sensor) ($90)
+- E-Ink screen: [Waveshare](https://www.amazon.com/gp/product/B075FQKSZ9/) ($27)
+- Light: [LED StopLight](https://www.amazon.com/Pi-Traffic-Light-Raspberry-pack/dp/B00RIIGD30/) ($12)
+- Raspberry Pi 4 Model B (64Bit)
+- SD card (Recommend the SanDisk Extreme PRO)
+- 5V power supply for the RPi
 
 ## Documentation
 
-TBD
+### System Overview
+
+Services in use:
+
+- `data-collector`: Node app that receives HR data over BLE and routes it to the MQTT broker.
+- `physical-output`: Node app that outputs live heart rate to the E-Ink display and traffic light LEDs.
+- `mqtt`: The MQTT broker.
+- `connector`: Routes MQTT messages from 'balena' topic to influxdb
+- `influxdb`: Time-based database.
+- `dashboard`: Used to visualize the heart rate over time.
+
+TODO: Discuss how this works and create a block diagram in Draw.io or similar
+
+### Environment Variables and Configurations
+
+TODO: Explain how to configure environment variables and other things (like timeout period, heart_rate threshold, etc)
 
 ## Getting Help
 
