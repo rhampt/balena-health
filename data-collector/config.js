@@ -1,5 +1,3 @@
-const logger = require('./logger');
-
 // Figured out my Mac Address by putting the container on idle and running `bluetoothctl | grep Polar`
 const h10MacAddr = process.env.H10_MAC_ADDR || 'E8:78:8D:A0:03:CA';
 
@@ -25,7 +23,5 @@ const config = {
   isLocalMode: fleetName === 'localapp',
   restartTimeCheckInSecs: 30,
 };
-
-logger.info('Applying Config: ' + JSON.stringify(config));
 
 module.exports = { config, gatttoolArgs };

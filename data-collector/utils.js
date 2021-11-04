@@ -23,7 +23,7 @@ const isMqttBrokerActive = async () => {
   }
 
   if (Object.keys(services).includes('mqtt')) {
-    logger.debug('The mqtt service is active; data will be routed');
+    logger.info('The mqtt service is active; data will be routed');
     return true;
   } else {
     logger.warn('There is no service named mqtt detected; date will not be routed');
@@ -37,14 +37,14 @@ const getMqttClient = async () => {
 
   // Subscribe to the balena topic to ensure BPM is being sent
   client.on('connect', function () {
-    logger.debug('MQTT Connected');
+    logger.info('MQTT Connected');
     client.subscribe('balena', function (err) {
       if (err) throw new Error("Failed to subscribe to the 'balena' topic; data will not be routed");
     });
   });
 
   client.on('disconnect', function () {
-    logger.debug('MQTT Disconnected');
+    logger.warn('MQTT Disconnected');
   });
 
   client.on('message', function (topic, message) {

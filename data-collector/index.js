@@ -9,6 +9,8 @@ const { clearTimeout } = require('timers');
 // Ensure that any thrown error that I don't handle gets logged
 process.on('unhandledRejection', (reason, p) => logger.error('Unhandled Promise Rejection: ' + reason.stack));
 
+logger.info('Applying Config: ' + JSON.stringify(config));
+
 // Global mqttClient Object
 let mqttClient = undefined;
 let gatttool = undefined;
