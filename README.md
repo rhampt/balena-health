@@ -9,7 +9,7 @@
 - Supports RaspberryPi4-64bit and RaspberryPi3-64bit
 - Configurable to include a time-series graph (InfluxDB) to see heart rate over time
 - Configurable to show heart rate on an attached E-Ink display
-- Configurable to show when your heart rate exceeds a specified value (on a small LED traffic light)
+- Configurable to an indicator when you heart rate exceeds a certain threshold
 
 ## Motivation
 
@@ -17,7 +17,7 @@ Mental health is extremely important. Stress is known to increase one’s heart 
 
 This solution allows you to monitor real-time and historical heart rate data while working. It will continually measure and display your heart rate on the locally connected screen. The wireless heart rate sensor communicates real-time to a Raspberry Pi via Bluetooth. An InfluxDB time series database is kept on the device and your historical heart rate data is presented by grafana at a private URL. This will help you spot trends and determine if this method of reducing stress actually works.
 
-Your desktop RPi application will update the attached E-Ink display every 30 seconds or so (configurable) with your latest heart rate. You will also have a connected traffic light LED to indicate the status of your heart rate zone (red=bad, yellow=warning, green=good; also configurable points). During periods of increased stress your yellow or green light would turn red, indicating you should take some deep breaths to slow your heart rate. The red-light deep breaths may end up causing fewer periods of stress.
+Your desktop RPi application will update the attached E-Ink display every 10 seconds (configurable) with your latest heart rate. If your heart rate reaches a configurable threshold, a sunset image will show on the E-Ink display, reminding you to take some deep breaths. This reminder to breathe will hopefully lower your heart rate and reduce your stress levels.
 
 ## Setup and Configuration
 
@@ -25,7 +25,6 @@ Your desktop RPi application will update the attached E-Ink display every 30 sec
 
 - Heart Sensor: [Polar H10](https://www.polar.com/us-en/products/accessories/h10_heart_rate_sensor) ($90)
 - E-Ink screen: [Waveshare](https://www.amazon.com/gp/product/B075FQKSZ9/) ($27)
-- Light: [LED StopLight](https://www.amazon.com/Pi-Traffic-Light-Raspberry-pack/dp/B00RIIGD30/) ($12)
 - Raspberry Pi 4 Model B (64Bit)
 - SD card (Recommend the SanDisk Extreme PRO)
 - 5V power supply for the RPi
@@ -37,7 +36,7 @@ Your desktop RPi application will update the attached E-Ink display every 30 sec
 Services in use:
 
 - `data-collector`: Node app that receives HR data over BLE and routes it to the MQTT broker.
-- `physical-output`: Node app that outputs live heart rate to the E-Ink display and traffic light LEDs.
+- `eink`: Node app that outputs live heart rate to the E-Ink display.
 - `mqtt`: The MQTT broker.
 - `connector`: Routes MQTT messages from 'balena' topic to influxdb
 - `influxdb`: Time-based database.
