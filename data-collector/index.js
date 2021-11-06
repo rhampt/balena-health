@@ -11,9 +11,10 @@ process.on('unhandledRejection', (reason, p) => logger.error('Unhandled Promise 
 
 logger.info('Applying Config: ' + JSON.stringify(config));
 
-// Global mqttClient Object
+// Global objects
 let mqttClient = undefined;
 let gatttool = undefined;
+let lastBpmPacket = undefined;
 
 const restartBpmMonitor = async () => {
   try {
@@ -45,9 +46,7 @@ const readBPM = async () => {
     if (byteArray.length > 1) {
       const bpmInt = parseInt(Number('0x' + byteArray[1]), 10);
       if (bpmInt && !isNaN(bpmInt)) {
-        // logger.debug('BPM: ' + bpmInt);
-        const jsonDataPacket = JSON.stringify({ date: new Date().toISOString(), bpm: bpmInt });
-        mqttClient?.publish('balena', jsonDataPacket);
+        lastBpmPacket = JSON.stringify({ date: new Date().toISOString(), bpm: bpmInt });
       }
     }
   });
@@ -81,6 +80,11 @@ const readBPM = async () => {
     logger.error('Failed to connect to the mqtt-broker service');
     logger.error(err?.message);
   }
+
+  // Set polling interval
+  setInterval(async () => {
+    if (lastBpmPacket) mqttClient?.publish('balena', lastBpmPacket);
+  }, config.mqttPubIntervalInSecs * 1000);
 
   // Connect to the BLE Heart Rate Sensor and send the values (if MQTT enabled)
   try {

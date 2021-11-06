@@ -21,7 +21,8 @@ const config = {
   supervisorApiKey: process.env.BALENA_SUPERVISOR_API_KEY || '',
   fleetName: fleetName,
   isLocalMode: fleetName === 'localapp',
-  restartTimeCheckInSecs: 30,
+  restartTimeCheckInSecs: process.env.BLUETOOTH_RETRY || 30,
+  mqttPubIntervalInSecs: process.env.MQTT_PUB_INTERVAL || 10,
 };
 
 module.exports = { config, gatttoolArgs };
