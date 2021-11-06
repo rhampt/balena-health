@@ -22,7 +22,7 @@ const config = {
   fleetName: fleetName,
   isLocalMode: fleetName === 'localapp',
   restartTimeCheckInSecs: process.env.BLUETOOTH_RETRY || 30,
-  mqttPubIntervalInSecs: process.env.MQTT_PUB_INTERVAL || 10,
+  mqttPubIntervalInSecs: process.env.MQTT_PUB_INTERVAL || 30,
 };
 
 module.exports = { config, gatttoolArgs };
