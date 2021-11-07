@@ -1,9 +1,14 @@
-FROM balenalib/raspberrypi3-ubuntu-python:3.7-bionic-build
+FROM balenalib/raspberrypi3-ubuntu-python:3.7-bionic-run
 
-RUN install_packages libfreetype6-dev
+RUN install_packages build-essential zlib1g-dev libjpeg-dev libfreetype6-dev
 
 # Defines our working directory in container
 WORKDIR /app
+
+COPY requirements.txt requirements.txt
+
+RUN pip3 install --upgrade pip
+RUN pip3 install -r requirements.txt
  
 # This will copy all files in our root to the working directory in the container (including start.sh)
 COPY . ./

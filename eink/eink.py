@@ -25,25 +25,20 @@ def init():
 
 
 def printHR(string):
-    HBlackImage = Image.new("1", (epd2in7.EPD_HEIGHT, epd2in7.EPD_WIDTH), 255)
-
-    draw = ImageDraw.Draw(
-        HBlackImage
-    )  # Create draw object and pass in the image layer we want to work with (HBlackImage)
-    font = ImageFont.truetype(
-        "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 90
-    )  # Create our font, passing in the font file and font size
-
-    draw.text((50, 40), string, font=font, fill=0)
-
-    epd.display(epd.getbuffer(HBlackImage))
+    bpmImg = Image.new("1", (epd2in7.EPD_HEIGHT, epd2in7.EPD_WIDTH), 255)
+    draw = ImageDraw.Draw(bpmImg)
+    font = ImageFont.truetype("lemon.ttf", 50)
+    draw.text((10, 50), string + " bpm", font=font, fill=0)
+    epd.display(epd.getbuffer(bpmImg))
 
 
 def printSunset():
-    image = Image.new("1", (epd2in7.EPD_HEIGHT, epd2in7.EPD_WIDTH), 255)
-    sunset = Image.open("sunset.png")
-    image.paste(sunset, (0, 0))
-    epd.display(epd.getbuffer(image))
+    sunsetImg = Image.new("1", (epd2in7.EPD_HEIGHT, epd2in7.EPD_WIDTH), 255)
+    sunsetImg.paste(Image.open("sunset.png"), (0, 0))
+    draw = ImageDraw.Draw(sunsetImg)
+    font = ImageFont.truetype("lemon.ttf", 20)
+    draw.text((15, 140), "Take deep breaths :)", font=font, fill=0)
+    epd.display(epd.getbuffer(sunsetImg))
 
 
 def evalMessage(client, userdata, message):
