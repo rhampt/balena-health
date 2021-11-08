@@ -14,9 +14,13 @@ epd = epd2in7.EPD()
 logging.basicConfig(level=logging.INFO)
 
 bpmThreshold = os.getenv("BPM_THRESHOLD", "80")
+mqttAddress = os.getenv("MQTT_ADDRESS", "localhost")
+mqttTopic = os.getenv("MQTT_SUB_TOPIC", "balena")
+mqttRetryInSecs = 30
+mqttConnectedFlag = False
 
 
-def init():
+def initDisplay():
     logging.info("Initializing and clearing the display")
     epd.init()
     epd.Clear()
@@ -41,9 +45,21 @@ def printSunset():
     epd.display(epd.getbuffer(sunsetImg))
 
 
-def evalMessage(client, userdata, message):
+def on_connect(client, userdata, flags, rc):
+    global mqttConnectedFlag
+    logging.info("MQTT connection successful. Subscribing to {0}".format(mqttTopic))
+    mqttConnectedFlag = True
+
+
+def on_disconnect(client, userdata, rc):
+    global mqttConnectedFlag
+    logging.info("MQTT disconnect detected")
+    mqttConnectedFlag = False
+
+
+def on_message(client, userdata, message):
     strPayload = str(message.payload.decode("utf-8"))
-    logging.info("message received {0}".format(strPayload))
+    logging.info("MQTT message received: {0}".format(strPayload))
 
     if message.topic == "balena":
         bpm = json.loads(strPayload)["bpm"]
@@ -51,30 +67,30 @@ def evalMessage(client, userdata, message):
             printHR(str(bpm))
         else:
             printSunset()
-    elif message.topic == "clear":
-        logging.info("TODO: handle clear case")
 
 
 def main():
-    init()
+    initDisplay()
 
-    mqtt_address = os.getenv("MQTT_ADDRESS", "localhost")
-    mqtt_topic = os.getenv("MQTT_SUB_TOPIC", "balena")
-
-    logging.info("Starting mqtt client, subscribed to {0}:1883".format(mqtt_address))
     client = mqtt.Client()
-    try:
-        client.connect(mqtt_address, 1883, 60)
-        client.loop_start()
-        client.subscribe(mqtt_topic)
-        client.on_message = evalMessage
-        logging.info("Subscribing to topic: {0}".format(mqtt_topic))
-    except Exception as e:
-        logging.error("Error connecting to mqtt. ({0})".format(str(e)))
-        exit(1)
+    client.on_connect = on_connect
+    client.on_disconnect = on_disconnect
+    client.on_message = on_message
 
     while True:
-        time.sleep(1)
+        if not mqttConnectedFlag:
+            logging.info(
+                "Attempting to connect to MQTT at {0}:1883".format(mqttAddress)
+            )
+            try:
+                client.connect(mqttAddress, 1883, 60)
+                client.loop_start()
+                client.subscribe(mqttTopic)
+            except Exception as e:
+                logging.error("Error connecting to MQTT. ({0})".format(str(e)))
+            time.sleep(mqttRetryInSecs)
+        else:
+            time.sleep(2)
 
 
 def exit_handler():
@@ -83,6 +99,7 @@ def exit_handler():
 
 
 atexit.register(exit_handler)
+
 
 if __name__ == "__main__":
     try:
