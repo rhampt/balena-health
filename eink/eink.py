@@ -20,6 +20,8 @@ heartBeatInterval = int(os.getenv("HEARTBEAT_INTERVAL", "60"))  # seconds
 mqttRetryPeriod = int(os.getenv("MQTT_RETRY_PERIOD", "30"))  # seconds
 mqttConnectedFlag = False
 
+client = mqtt.Client()
+
 
 class HeartBeatTimer(object):
     def __init__(self, interval, function):
@@ -77,6 +79,7 @@ def printSunset():
 def on_connect(client, userdata, flags, rc):
     global mqttConnectedFlag
     logging.info("MQTT connection established, subscribing to the 'balena' topic")
+    client.subscribe("balena")
     mqttConnectedFlag = True
 
 
@@ -117,7 +120,6 @@ def main():
     # Initialize and clear the display
     initDisplay()
 
-    client = mqtt.Client()
     client.on_connect = on_connect
     client.on_disconnect = on_disconnect
     client.on_message = on_message
@@ -130,7 +132,6 @@ def main():
             try:
                 client.connect("localhost", 1883, 60)
                 client.loop_start()
-                client.subscribe("balena")
             except Exception as e:
                 logging.error("MQTT connection error: {0}".format(str(e)))
             time.sleep(mqttRetryPeriod)
@@ -141,6 +142,8 @@ def main():
 def exit_handler():
     logging.info("Exiting, clearing display")
     heartBeatTimer.cancel()
+    client.disconnect()
+    client.loop_stop()
     epd.Clear()
 
 

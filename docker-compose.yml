@@ -21,7 +21,7 @@ services:
     privileged: true
     network_mode: host
     environment:
-      - BPM_THRESHOLD=80 # integer bpm threshould
+      - BPM_THRESHOLD=80 # integer bpm threshold
       - HEARTBEAT_INTERVAL=60 # integer number of seconds
       - MQTT_RETRY_PERIOD=30 # integer number of seconds
 

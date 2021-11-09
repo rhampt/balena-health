@@ -17,7 +17,7 @@ Our CI will run checks to ensure this guidelines are followed and won't allow me
 
 Each commit message should consist of a header a body and a footer, structured in the following format:
 
-```
+```text
 <scope (optional)>: <subject (mandatory)>
 --BLANK LINE--
 (optional) <body>

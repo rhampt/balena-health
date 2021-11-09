@@ -29,7 +29,7 @@ const restartBpmMonitor = async () => {
   }
 };
 
-// Create a heartbeat monitor for gatttool so if no stdout for some time, respawn it
+// Create a heartbeat monitor for gatttool so if no stdout for some time, re-spawn it
 let gatttoolHeartBeat = setTimeout(restartBpmMonitor, config.bluetoothRetryPeriod * 1000);
 
 const readBPM = async () => {
