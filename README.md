@@ -21,8 +21,6 @@ BalenaHealth has been tested on the following devices:
 | Raspberry Pi 3b+ | ✔      |
 | Raspberry Pi 4   | ✔      |
 
-</br>
-
 ## Motivation
 
 We can all agree that mental health is extremely important. The goal of BalenaHealth is to create DIY solutions for improving your mental well-being. In this initial version, the project is used for monitoring your heart rate while working to gauge stress levels and decrease them over time.
