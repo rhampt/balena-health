@@ -1,4 +1,4 @@
-// Figured out my Mac Address by putting the container on idle and running `bluetoothctl | grep Polar`
+// Figured out my Mac Address by putting the container on idle and running `hcitool lescan | grep Polar`
 const h10MacAddr = process.env.H10_MAC_ADDR || 'E8:78:8D:A0:03:CA';
 
 // Gatttool command line args
@@ -17,12 +17,10 @@ const fleetName = process.env.BALENA_APP_NAME || '';
 
 const config = {
   h10MacAddr: h10MacAddr,
-  supervisorAddr: process.env.BALENA_SUPERVISOR_ADDRESS || '',
-  supervisorApiKey: process.env.BALENA_SUPERVISOR_API_KEY || '',
   fleetName: fleetName,
   isLocalMode: fleetName === 'localapp',
-  restartTimeCheckInSecs: process.env.BLUETOOTH_RETRY || 30,
-  mqttPubIntervalInSecs: process.env.MQTT_PUB_INTERVAL || 30,
+  bluetoothRetryPeriod: process.env.BLUETOOTH_RETRY || 30, // In Seconds
+  mqttPubInterval: process.env.MQTT_PUB_INTERVAL || 30, // In Seconds
 };
 
 module.exports = { config, gatttoolArgs };

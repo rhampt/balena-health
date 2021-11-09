@@ -1,6 +1,6 @@
 const logger = require('./logger');
 const { config, gatttoolArgs } = require('./config');
-const { sleep, getMqttClient, isMqttBrokerActive } = require('./utils');
+const { sleep, getMqttClient } = require('./utils');
 
 const { spawn } = require('child_process');
 const readline = require('readline');
@@ -14,11 +14,12 @@ logger.info('Applying Config: ' + JSON.stringify(config));
 // Global objects
 let mqttClient = undefined;
 let gatttool = undefined;
+let gatttoolActive = false;
 let lastBpmPacket = undefined;
 
 const restartBpmMonitor = async () => {
   try {
-    gatttoolHeartBeat = setTimeout(restartBpmMonitor, config.restartTimeCheckInSecs * 1000);
+    gatttoolHeartBeat = setTimeout(restartBpmMonitor, config.bluetoothRetryPeriod * 1000);
     logger.warn('gatttool is not active, trying again');
     gatttool?.kill();
     sleep(1000);
@@ -29,16 +30,17 @@ const restartBpmMonitor = async () => {
 };
 
 // Create a heartbeat monitor for gatttool so if no stdout for some time, respawn it
-let gatttoolHeartBeat = setTimeout(restartBpmMonitor, config.restartTimeCheckInSecs * 1000);
+let gatttoolHeartBeat = setTimeout(restartBpmMonitor, config.bluetoothRetryPeriod * 1000);
 
 const readBPM = async () => {
-  logger.info('Attempting to read your HR BPM');
+  logger.info('Attempting to read your heart rate');
   gatttool = spawn('gatttool', gatttoolArgs);
 
   const rl = readline.createInterface({ input: gatttool.stdout });
   rl.on('line', (line) => {
+    gatttoolActive = true;
     clearTimeout(gatttoolHeartBeat);
-    gatttoolHeartBeat = setTimeout(restartBpmMonitor, config.restartTimeCheckInSecs * 1000);
+    gatttoolHeartBeat = setTimeout(restartBpmMonitor, config.bluetoothRetryPeriod * 1000);
 
     const lineStr = line.toString();
     const byteArray = lineStr.substring(lineStr.indexOf(': ') + 2).split(' ');
@@ -56,7 +58,9 @@ const readBPM = async () => {
   });
 
   gatttool.on('close', (code) => {
-    logger.info('gatttool process exited with code ' + code?.toString());
+    gatttoolActive = false;
+    if (!code) logger.info('gatttool was killed (no stdout for ' + config.bluetoothRetryPeriod + ' seconds');
+    else logger.info('gatttool process exited with code ' + code?.toString());
   });
 };
 
@@ -64,13 +68,6 @@ const readBPM = async () => {
 (async () => {
   //sleep for a few seconds so that device state settles
   sleep(1000 * 5);
-
-  // First check if the mqtt-broker service is active
-  try {
-    await isMqttBrokerActive();
-  } catch (err) {
-    logger.error(err?.message);
-  }
 
   // Connect to the MQTT broker
   try {
@@ -83,8 +80,8 @@ const readBPM = async () => {
 
   // Set polling interval
   setInterval(async () => {
-    if (lastBpmPacket) mqttClient?.publish('balena', lastBpmPacket);
-  }, config.mqttPubIntervalInSecs * 1000);
+    if (lastBpmPacket && gatttoolActive) mqttClient?.publish('balena', lastBpmPacket);
+  }, config.mqttPubInterval * 1000);
 
   // Connect to the BLE Heart Rate Sensor and send the values (if MQTT enabled)
   try {

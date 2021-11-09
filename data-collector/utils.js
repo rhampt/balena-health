@@ -13,11 +13,13 @@ const isMqttBrokerActive = async () => {
   let services = undefined;
 
   if (config.isLocalMode) {
-    const url = `${config.supervisorAddr}/v2/local/target-state`;
+    const url = `${process.env.BALENA_SUPERVISOR_ADDRESS}/v2/local/target-state`;
     const response = await axios.get(url);
     services = response?.data?.state?.local?.apps['1'].services;
   } else {
-    const url = `${config.supervisorAddr}/v2/applications/state?apikey=${config.supervisorApiKey}`;
+    const supervisorAddr = process.env.BALENA_SUPERVISOR_ADDRESS;
+    const supervisorApiKey = process.env.BALENA_SUPERVISOR_API_KEY;
+    const url = `${supervisorAddr}/v2/applications/state?apikey=${supervisorApiKey}`;
     const response = await axios.get(url);
     services = response.data[config.fleetName].services;
   }

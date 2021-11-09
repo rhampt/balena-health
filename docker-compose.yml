@@ -1,55 +1,56 @@
 version: '2'
 
 volumes:
-  collected-data:
+  influxdb-data:
   dashboard-data:
 
 services:
   data-collector:
     build: ./data-collector
-    restart: on-failure
-    network_mode: host
+    restart: always
     privileged: true
-    cap_add:
-      - NET_ADMIN
+    network_mode: host
     environment:
-      - DBUS_SYSTEM_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket
-    labels:
-      io.balena.features.dbus: '1'
-      io.balena.features.kernel-modules: '1'
-      io.balena.features.supervisor-api: '1' # necessary to discover services in local mode
+      - H10_MAC_ADDR=E8:78:8D:A0:03:CA
+      - BLUETOOTH_RETRY=30 # integer number of seconds
+      - MQTT_PUB_INTERVAL=30 # integer number of seconds
 
   eink:
     build: ./eink
-    restart: on-failure
-    network_mode: host
+    restart: always
     privileged: true
-    cap_add:
-      - NET_ADMIN
+    network_mode: host
+    environment:
+      - BPM_THRESHOLD=80 # integer bpm threshould
+      - HEARTBEAT_INTERVAL=60 # integer number of seconds
+      - MQTT_RETRY_PERIOD=30 # integer number of seconds
 
   mqtt:
     image: eclipse-mosquitto:1.6.15
     restart: always
+    privileged: false
     ports:
       - '1883:1883'
 
   connector:
-    image: balenablocks/connector:raspberrypi3
+    image: balenablocks/connector:latest
     restart: always
+    privileged: true
     labels:
       io.balena.features.balena-api: '1' # necessary to discover services
       io.balena.features.supervisor-api: '1' # necessary to discover services in local mode
-    privileged: true
 
   influxdb:
     image: arm32v7/influxdb@sha256:2fed9b09a672cab330ac3ea1f03616e6821f2235bda64d549f605ef0d7081911
     restart: always
+    privileged: false
     volumes:
-      - 'collected-data:/var/lib/influxdb'
+      - 'influxdb-data:/var/lib/influxdb'
 
   dashboard:
     image: balenablocks/dashboard
     restart: always
+    privileged: false
     volumes:
       - 'dashboard-data:/data'
     ports:
