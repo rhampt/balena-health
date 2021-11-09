@@ -35,6 +35,8 @@ Your desktop RPi application will update the attached E-Ink display every 10 sec
 
 ### System Overview
 
+![logo](https://raw.githubusercontent.com/rhampt/balena-health/main/images/balena-health-architecture.png)
+
 Services in use:
 
 - `data-collector`: Node app that receives HR data over BLE and routes it to the MQTT broker.
@@ -43,8 +45,6 @@ Services in use:
 - `connector`: Routes MQTT messages from 'balena' topic to influxdb
 - `influxdb`: Time-based database.
 - `dashboard`: Used to visualize the heart rate over time.
-
-TODO: Discuss how this works and create a block diagram in Draw.io or similar
 
 ### Environment Variables and Configurations
 
