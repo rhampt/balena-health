@@ -45,9 +45,9 @@ TODO: Explain the setup and post pictures of various connections between sensors
 
 ## System Overview
 
-![logo](images/balena-health-architecture.png)
+![logo](images/balena-health-architecture-simple.png)
 
-The system architecture image above shows the high level view of the entire system deployed on the Raspberry Pi. To learn more about this operating system, head over to our page on [balenaOS](https://www.balena.io/os/). There are six user-space containers deployed as services via the docker-compose.yml file. These are described below.
+The system architecture image above shows the high level view of the containers deployed on the Raspberry Pi. To learn more about this operating system, head over to our page on [balenaOS](https://www.balena.io/os/). There are six user-space containers deployed as services via the docker-compose.yml file. These are described below.
 
 ## `data-collector` service
 
