@@ -11,7 +11,8 @@ services:
     privileged: true
     network_mode: host
     environment:
-      - H10_MAC_ADDR=E8:78:8D:A0:03:CA
+      - SIMULATION_MODE=true # set to true if you have no HW
+      - H10_MAC_ADDR=E8:78:8D:A0:03:CA # see README.md
       - BLUETOOTH_RETRY=30 # integer number of seconds
       - MQTT_PUB_INTERVAL=30 # integer number of seconds
 
@@ -21,6 +22,7 @@ services:
     privileged: true
     network_mode: host
     environment:
+      - SIMULATION_MODE=true # set to true if you have no HW
       - BPM_THRESHOLD=80 # integer bpm threshold
       - HEARTBEAT_INTERVAL=60 # integer number of seconds
       - MQTT_RETRY_PERIOD=30 # integer number of seconds

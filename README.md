@@ -11,6 +11,7 @@ This is a balenaHub project that allows users to monitor their heart rate in rea
 - Include a time-series graph (InfluxDB -> Grafana) to see heart rate over time
 - Shows heart rate on an attached E-Ink display
 - Configured visual and audio indicator when you heart rate exceeds a certain threshold
+- Simulation mode for those wishing to test without purchasing hardware!
 
 ## Supported Devices
 
@@ -31,13 +32,17 @@ Your desktop RPi application will update the attached E-Ink display every 30 sec
 
 ## Equipment
 
-- Heart Sensor: [Polar H10](https://www.polar.com/us-en/products/accessories/h10_heart_rate_sensor) ($90)
-- E-Ink screen: [Waveshare](https://www.amazon.com/gp/product/B075FQKSZ9/) ($27)
 - Single-board computer: [Raspberry Pi 4 Model B](https://www.amazon.com/Raspberry-Model-2019-Quad-Bluetooth/dp/B07TC2BK1X/) ($95)
 - SD card: [SanDisk Extreme Pro](https://www.amazon.com/SanDisk-Extreme-UHS-I-128GB-Adapter/dp/B07G3GMRYF/) ($15)
 - Case (with fan, heatsink, and power supply): [Miuzei brand](https://www.amazon.com/Miuzei-Raspberry-Cooling-Aluminum-Heatsinks/dp/B07TTN1M7G/) ($15)
+- Heart rate sensor: [Polar H10](https://www.polar.com/us-en/products/accessories/h10_heart_rate_sensor) ($90)
+- E-Ink screen: [Waveshare](https://www.amazon.com/gp/product/B075FQKSZ9/) ($27)
 
-Total: **$242**
+**Note:** You can deploy this project using simulation mode without having the heart rate sensor and E-Ink screen.
+
+Total with all equipment: $242
+
+Total with only essential equipment: $125
 
 ## Hardware Configuration
 
@@ -61,20 +66,22 @@ services:
     privileged: true
     network_mode: host
     environment:
-      - H10_MAC_ADDR=E8:78:8D:A0:03:CA
+      - SIMULATION_MODE=true # set to true if you have no HW
+      - H10_MAC_ADDR=E8:78:8D:A0:03:CA # see README.md
       - BLUETOOTH_RETRY=30 # integer number of seconds
       - MQTT_PUB_INTERVAL=30 # integer number of seconds
 ```
 
-As you can see, this service builds the local `data-collector`. Looking at that project's `Dockerfile.template` the base image is `balenalib/%%BALENA_MACHINE_NAME%%-ubuntu-node:14.18.1-bionic-run` where %%BALENA_MACHINE_NAME%% will resolve to your device (ex: raspberrypi4-64). We used the run variant to slim down the container size. Using `install_packages`, we made sure to install the relevant bluetooth packages for our node application to work. Note that the `CMD` could just be `npm start` here, but we wanted an entry point that allowed for future customization so we instead executed `start.sh` which just executes `npm start` before idling.
+As you can see, this service builds the local `data-collector`. Looking at that project's `Dockerfile.template` the base image is `balenalib/%%BALENA_MACHINE_NAME%%-ubuntu-node:14.18.1-bionic-run` where %%BALENA_MACHINE_NAME%% will resolve to your device (ex: raspberrypi4-64). We used the run variant to slim down the container size. Using `install_packages`, we made sure to install the relevant bluetooth packages for our node application to work. The Docker `CMD` executed is `start.sh` which just executes `npm run start` (or `npm run start-sim` if in simulation mode) before idling.
 
 Check out `index.js` to see how we spawn the gatttool application in order to connect to the heart rate monitor via bluetooth low-energy (BLE).
 
 There are three configurable environment variables:
 
-1. `H10_MAC_ADDR` is the Mac Address of your sensor. You can figure out your sensor's Mac Address by starting the service on idle and running `bluetoothctl | grep Polar` or `hcitool lescan | grep Polar`.
-2. `BLUETOOTH_RETRY` is the number of seconds to wait to try to reconnect to your sensor via the gatttool application.
-3. `MQTT_PUB_INTERVAL` is the frequency in seconds that you want to send your heart rate (in BPM). Too often, and the e-ink display can't keep up with the changes and you will see some strange symbols. Not often enough and you won't get an accurate account of your heart rate.
+1. `SIMULATION_MODE` is a flag for selecting which file to execute. If it's not set or set to false, we'll assume you have the hardware and it's hooked up. If it's set to true, we'll run a simulation of the hardware instead.
+2. `H10_MAC_ADDR` is the Mac Address of your sensor. You can figure out your sensor's Mac Address by starting the service on idle and running `bluetoothctl | grep Polar` or `hcitool lescan | grep Polar`.
+3. `BLUETOOTH_RETRY` is the number of seconds to wait to try to reconnect to your sensor via the gatttool application.
+4. `MQTT_PUB_INTERVAL` is the frequency in seconds that you want to send your heart rate (in BPM). Too often, and the e-ink display can't keep up with the changes and you will see some strange symbols. Not often enough and you won't get an accurate account of your heart rate.
 
 ## `eink` service
 
@@ -88,20 +95,22 @@ services:
     privileged: true
     network_mode: host
     environment:
+      - SIMULATION_MODE=true # set to true if you have no HW
       - BPM_THRESHOLD=80 # integer bpm threshold
       - HEARTBEAT_INTERVAL=60 # integer number of seconds
       - MQTT_RETRY_PERIOD=30 # integer number of seconds
 ```
 
-As you can see, this service builds the local `eink`. Looking at that project's `Dockerfile.template` the base image is `balenalib/raspberrypi3-ubuntu-python:3.7-bionic-run`. We used the run variant to slim down the container size. Using `install_packages`, we made sure to install the relevant packages for our application. Pillow requires `zlib1g-dev`, `libjpeg-dev`, and `libfreetype6-dev`. Note that the `CMD` could just be `npm start` here, but we wanted an entry point that allowed for future customization so we instead executed `start.sh` which just executes `python3 eink.py` before idling.
+As you can see, this service builds the local `eink`. Looking at that project's `Dockerfile.template` the base image is `balenalib/raspberrypi3-ubuntu-python:3.7-bionic-run`. We used the run variant to slim down the container size. Using `install_packages`, we made sure to install the relevant packages for our application. Pillow requires `zlib1g-dev`, `libjpeg-dev`, and `libfreetype6-dev`. The Docker `CMD` executed is `start.sh` which just executes `npm run start` (or `npm run start-sim` if in simulation mode) before idling.
 
 Check out `eink.py` to see how we receive MQTT messages and route them to the display in real time.
 
 There are three configurable environment variables:
 
-1. `BPM_THRESHOLD` is the configured threshold to trigger the image and buzzing alarm as a reminder to breathe. Everyone has different base heart rate levels, so make sure to set it sufficiently high so as not to trigger during periods of non-stress.
-2. `HEARTBEAT_INTERVAL` is the number of seconds to elapsed with no heart rate data before clearing the screen. With E-ink displays it's import to not leave the screen with any black pixels on it for too long, or else they could get burned in! This helps make sure that when you walk away or there is a disconnect event, the screen repeatedly clears itself.
-3. `MQTT_RETRY_PERIOD` is the number of seconds that must elapse before trying to connect to the MQTT broker again. This is only used if a connection dies or is failed to be established in the first place (ex: perhaps the `mqtt` service is slower to spin up).
+1. `SIMULATION_MODE` is a flag for selecting which file to execute. If it's not set or set to false, we'll assume you have the hardware and it's hooked up. If it's set to true, we'll run a simulation of the hardware instead.
+2. `BPM_THRESHOLD` is the configured threshold to trigger the image and buzzing alarm as a reminder to breathe. Everyone has different base heart rate levels, so make sure to set it sufficiently high so as not to trigger during periods of non-stress.
+3. `HEARTBEAT_INTERVAL` is the number of seconds to elapsed with no heart rate data before clearing the screen. With E-ink displays it's import to not leave the screen with any black pixels on it for too long, or else they could get burned in! This helps make sure that when you walk away or there is a disconnect event, the screen repeatedly clears itself.
+4. `MQTT_RETRY_PERIOD` is the number of seconds that must elapse before trying to connect to the MQTT broker again. This is only used if a connection dies or is failed to be established in the first place (ex: perhaps the `mqtt` service is slower to spin up).
 
 ## `mqtt` service
 

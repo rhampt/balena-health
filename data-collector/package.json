@@ -7,6 +7,7 @@
   "type": "commonjs",
   "scripts": {
     "start": "node index.js",
+    "start-sim": "node index-sim.js",
     "lint": "eslint . --config .eslintrc.json",
     "lint:fix": "eslint  . --config .eslintrc.json --fix",
     "clean": "rimraf node_modules"
