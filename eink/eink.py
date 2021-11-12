@@ -23,10 +23,11 @@ epd = epd2in7.EPD()
 
 logging.basicConfig(level=logging.INFO)
 
-bpmThreshold = int(os.getenv("BPM_THRESHOLD", "80"))
+bpmThreshold = int(os.getenv("BPM_THRESHOLD", "75"))
 heartBeatInterval = int(os.getenv("HEARTBEAT_INTERVAL", "60"))  # seconds
 mqttRetryPeriod = int(os.getenv("MQTT_RETRY_PERIOD", "30"))  # seconds
 simulationMode = os.getenv("SIMULATION_MODE", "false")
+buzzerAlarm = os.getenv("BUZZER_ALARM", "true")
 mqttConnectedFlag = False
 
 client = mqtt.Client()
@@ -84,9 +85,10 @@ def printSunset():
     )
     epd.display(epd.getbuffer(sunsetImg))
 
-    GPIO.output(BUZZER_PIN, GPIO.LOW)  # Turn on buzzer
-    sleep(0.5)
-    GPIO.output(BUZZER_PIN, GPIO.HIGH)  # Turn off buzzer
+    if buzzerAlarm == "true":
+        GPIO.output(BUZZER_PIN, GPIO.LOW)  # Turn on buzzer
+        sleep(0.5)
+        GPIO.output(BUZZER_PIN, GPIO.HIGH)  # Turn off buzzer
 
 
 def on_connect(client, userdata, flags, rc):
