@@ -1,9 +1,6 @@
-FROM balenalib/%%BALENA_MACHINE_NAME%%-ubuntu-node:14.18.1-bionic-run
+FROM balenalib/%%BALENA_MACHINE_NAME%%-ubuntu-node:14.18.1-bionic-build AS build
 
-RUN install_packages build-essential bluetooth bluez libbluetooth-dev libudev-dev
-
-# Defines our working directory in container
-WORKDIR /app
+WORKDIR /app 
 
 # Copies the package.json first for better cache on later pushes
 COPY package*.json ./
@@ -12,7 +9,14 @@ COPY package*.json ./
 # making sure to clean up the artifacts it creates in order to reduce the image size.
 RUN JOBS=MAX npm install --production --unsafe-perm && npm cache verify && rm -rf /tmp/*
 
-# This will copy all files in our root to the working directory in the container (including start.sh)
+FROM balenalib/%%BALENA_MACHINE_NAME%%-alpine-node:14.18.1-run
+
+RUN install_packages bluez-deprecated 
+
+WORKDIR /app
+
+COPY --from=build /app/node_modules node_modules
+
 COPY . ./
 
 RUN chmod +x start.sh
