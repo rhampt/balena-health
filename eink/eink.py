@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 import os
 import logging
-import time
+from time import sleep
 import atexit
 import json
 import random
@@ -10,6 +10,14 @@ from threading import Timer
 import paho.mqtt.client as mqtt
 from PIL import Image, ImageDraw, ImageFont
 from waveshare_epd import epd2in7  # https://www.waveshare.com/wiki/2.7inch_e-Paper_HAT
+import RPi.GPIO as GPIO
+
+BUZZER_PIN = 5
+KEY1_PIN = 16
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
+GPIO.setup(BUZZER_PIN, GPIO.OUT, initial=GPIO.HIGH)
+GPIO.setup(KEY1_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 epd = epd2in7.EPD()
 
@@ -76,6 +84,10 @@ def printSunset():
     )
     epd.display(epd.getbuffer(sunsetImg))
 
+    GPIO.output(BUZZER_PIN, GPIO.LOW)  # Turn on buzzer
+    sleep(0.5)
+    GPIO.output(BUZZER_PIN, GPIO.HIGH)  # Turn off buzzer
+
 
 def on_connect(client, userdata, flags, rc):
     global mqttConnectedFlag
@@ -105,7 +117,7 @@ def on_message(client, userdata, message):
 
 def main():
     # Give the device state time to settle
-    time.sleep(5)
+    sleep(5)
 
     logging.info(
         "Applying Config: "
@@ -127,6 +139,10 @@ def main():
     client.on_message = on_message
 
     while True:
+        if GPIO.input(KEY1_PIN) == False:
+            logging.info("Key 1 Pressed")
+            initDisplay()
+            sleep(0.5)
         if not mqttConnectedFlag:
             logging.info(
                 "Attempting to establish an MQTT connection at mqtt://localhost:1883"
@@ -136,9 +152,7 @@ def main():
                 client.loop_start()
             except Exception as e:
                 logging.error("MQTT connection error: {0}".format(str(e)))
-            time.sleep(mqttRetryPeriod)
-        else:
-            time.sleep(2)
+            sleep(mqttRetryPeriod)
 
 
 def exit_handler():
