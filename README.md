@@ -4,6 +4,8 @@
 
 This is a balenaHub project that allows users to monitor their heart rate in real time. Future enhancements will be to support health and well-being.
 
+The corresponding blog post is [here](TODO://)
+
 ## Highlights
 
 - Supports any Low-Energy Bluetooth (BLE) heart rate monitor that conforms to Bluetooth SIG's [Service Schema](https://www.bluetooth.com/wp-content/uploads/Sitecore-Media-Library/Gatt/Xml/Services/org.bluetooth.service.heart_rate.xml).
@@ -37,16 +39,14 @@ Your desktop RPi application will update the attached E-Ink display every 30 sec
 - Case (with fan, heatsink, and power supply): [Miuzei brand](https://www.amazon.com/Miuzei-Raspberry-Cooling-Aluminum-Heatsinks/dp/B07TTN1M7G/) ($15)
 - Heart rate sensor: [Polar H10](https://www.polar.com/us-en/products/accessories/h10_heart_rate_sensor) ($90)
 - E-Ink screen: [Waveshare](https://www.amazon.com/gp/product/B075FQKSZ9/) ($27)
+- Active Buzzer Module: [Ximimark](https://www.amazon.com/Ximimark-Active-Buzzer-Module-arduino/dp/B07TVN22LP) ($6)
+- Jumper Wires: [HiLetgo](https://www.amazon.com/HiLetgo-Breadboard-Prototype-Assortment-Raspberry/dp/B077X7MKHN) ($6)
 
-**Note:** You can deploy this project using simulation mode without having the heart rate sensor and E-Ink screen.
+**Note:** You can deploy this project using simulation mode without having the heart rate sensor, E-Ink screen, or buzzer module attached.
 
-Total with all equipment: $242
+Total with all equipment: $254
 
 Total with only essential equipment: $125
-
-## Hardware Configuration
-
-TODO: Explain the setup and post pictures of various connections between sensors and the Raspberry pi. Also include an overall image of the system working.
 
 ## System Overview
 
@@ -134,6 +134,32 @@ A customizable data visualization tool with automatically generated dashboards b
 This service will display a your historic heart rate measurements in a Grafana dashboard accessible via the device URL port 80. If you're deploying the project to balenaCloud, make sure to enable your device's Public URL to view this dashboard.
 
 Check out the [balenablocks/dashboard](https://github.com/balenablocks/dashboard) repo for more details.
+
+## Hardware Configuration
+
+Here are two images of the overall system in operation, one where my bpm is "normal" and the other after a triggering event.
+
+![System](images/System.png)
+
+**Note**: A helpful website for getting info on the BCM and pin mappings for the Raspberry Pi is [pinout.xyz](https://pinout.xyz/). All pin names mentioned are for the BCM mappings for the Raspberry Pi 4 as shown in this image:
+
+![Pinout](images/RPi_4_Pinout.jpg)
+
+### Fan Pins
+
+My fan (mounted to the case) is using a 5V (red) and a Ground (black) pin. Any will do.
+
+### Buzzer Pins
+
+My buzzer is using a 3.3V (red) and a Ground (black) pin. The white jumper wire connects from the I/O pin on the buzzer board to the GPIO 5 pin on the RPi.
+
+### E-Ink Pins
+
+I followed along with the the [Waveshare DIYProjects Guide](https://diyprojects.io/test-waveshare-epaper-eink-2-7-spi-screen-raspberry-pi-python/) to wire the E-Ink display to the RPi. Since I have a case mounted, I couldn't use the nice header strip that would have mounted it directly to the RPi. Instead, I configured the various SPI pins to those on the RPi. In order for me to handle the `Key 1` press event from the display, I configured one of the header pins to GPIO Pin 16 on the RPi. Here is an image of my E-Ink screen wiring followed by some close ups of the RPi wiring.
+
+![EInk_Pins](images/EInk_Pins.png)
+
+![CloseUps](images/CloseUps.png)
 
 ## Getting Help
 
