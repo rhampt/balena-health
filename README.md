@@ -155,7 +155,20 @@ My buzzer is using a 3.3V (red) and a Ground (black) pin. The white jumper wire 
 
 ### E-Ink Pins
 
-I followed along with the the [Waveshare DIYProjects Guide](https://diyprojects.io/test-waveshare-epaper-eink-2-7-spi-screen-raspberry-pi-python/) to wire the E-Ink display to the RPi. Since I have a case mounted, I couldn't use the nice header strip that would have mounted it directly to the RPi. Instead, I configured the various SPI pins to those on the RPi. In order for me to handle the `Key 1` press event from the display, I configured one of the header pins to GPIO Pin 16 on the RPi. Here is an image of my E-Ink screen wiring followed by some close ups of the RPi wiring.
+I followed along with the the [Waveshare DIYProjects Guide](https://diyprojects.io/test-waveshare-epaper-eink-2-7-spi-screen-raspberry-pi-python/) to wire the E-Ink display to the RPi. Since I have a case mounted, I couldn't use the nice header strip that would have mounted it directly to the RPi. Instead, I configured the various SPI pins to those on the RPi. In order for me to handle the `Key 1` press event from the display, I configured one of the header pins to GPIO Pin 16 on the RPi.
+
+| E-Ink | Wire Color | RPi Pin |
+| ----- | ---------- | ------- |
+| BUSY  | purple     | GPIO 24 |
+| RST   | white      | GPIO 17 |
+| DC    | green      | GPIO 25 |
+| CS    | orange     | GPIO 8  |
+| CLK   | yellow     | GPIO 11 |
+| DIN   | blue       | GPIO 10 |
+| GND   | brown      | GND     |
+| VCC   | gray       | 3.3V    |
+
+Here is an image of my E-Ink screen wiring followed by some close ups of the RPi wiring.
 
 ![EInk_Pins](images/EInk_Pins.png)
 
