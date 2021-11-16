@@ -14,12 +14,12 @@ assets:
       url: https://github.com/rhampt/balena-health/blob/main/images/logo.png
 data:
   applicationEnvironmentVariables:
-    - SIMULATION_MODE: false
+    - SIMULATION_MODE: true
     - BPM_THRESHOLD: 75
     - BUZZER_ALARM: true
     - HEARTBEAT_INTERVAL: 60
     - MQTT_RETRY_PERIOD: 30
-    - H10_MAC_ADDR: null
+    - H10_MAC_ADDR: NONE
     - BLUETOOTH_RETRY: 30
     - MQTT_PUB_INTERVAL: 30
   defaultDeviceType: raspberry-pi4-64

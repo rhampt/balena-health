@@ -4,7 +4,7 @@
 
 This is a balenaHub project that allows users to monitor their heart rate in real time. Future enhancements will be to support health and well-being.
 
-The corresponding blog post is [here](TODO://)
+[![balena deploy button](https://www.balena.io/deploy.svg)](https://dashboard.balena-cloud.com/deploy?repoUrl=https://github.com/rhampt/balena-health)
 
 ## Highlights
 
