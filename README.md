@@ -97,6 +97,7 @@ services:
     environment:
       - SIMULATION_MODE=true # set to true if you have no HW
       - BPM_THRESHOLD=80 # integer bpm threshold
+      - BUZZER_ALARM=true # set to false if you don't want the buzzer to sound
       - HEARTBEAT_INTERVAL=60 # integer number of seconds
       - MQTT_RETRY_PERIOD=30 # integer number of seconds
 ```
