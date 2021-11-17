@@ -4,7 +4,7 @@
 - **Difficulty:** Easy
 - **Cost:** $0 - $254
 
-This post is about how I built a heart rate monitoring system for my home office using balena technology. Check out my code here <https://github.com/rhampt/balena-health>
+This post is about how I built a heart rate monitoring system for my home office using balena technology. Check out my code here <https://github.com/rhampt/balena-health> to follow along.
 
 _Are you looking to decrease your stress and improve your mental well-being? Follow along with my DIY guide for monitoring your heart rate during the work day!_
 
