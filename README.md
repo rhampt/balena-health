@@ -6,6 +6,8 @@ This is a balenaHub project that allows users to monitor their heart rate in rea
 
 [![balena deploy button](https://www.balena.io/deploy.svg)](https://dashboard.balena-cloud.com/deploy?repoUrl=https://github.com/rhampt/balena-health)
 
+Please follow along with my blog post here: TBD_LINK (markdown [here](Blog.md))
+
 ## Highlights
 
 - Supports any Low-Energy Bluetooth (BLE) heart rate monitor that conforms to Bluetooth SIG's [Service Schema](https://www.bluetooth.com/wp-content/uploads/Sitecore-Media-Library/Gatt/Xml/Services/org.bluetooth.service.heart_rate.xml).
