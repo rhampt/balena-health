@@ -85,7 +85,7 @@ Total with only essential equipment: $125
 
 ## Hardware Configuration
 
-**Note:** Feel free to skip this section if you are running the application in `SIMULATION_MODE` and don't have hardware.
+**Note:** Feel free to skip this section if you are running the application in `SIMULATION_MODE=true` and don't have hardware.
 
 Here are two images of the overall system in operation, one where my bpm is "normal" and the other after a triggering event.
 
@@ -208,7 +208,7 @@ services:
     privileged: true
     network_mode: host
     environment:
-      - SIMULATION_MODE=true # set to true if you have no HW
+      - SIMULATION_MODE=false # set to true if you have no HW
       - H10_MAC_ADDR=E8:78:8D:A0:03:CA # see README.md
       - BLUETOOTH_RETRY=30 # integer number of seconds
       - MQTT_PUB_INTERVAL=30 # integer number of seconds
@@ -237,7 +237,7 @@ services:
     privileged: true
     network_mode: host
     environment:
-      - SIMULATION_MODE=true # set to true if you have no HW
+      - SIMULATION_MODE=false # set to true if you have no HW
       - BPM_THRESHOLD=80 # integer bpm threshold
       - BUZZER_ALARM=true # set to false if you don't want the buzzer to sound
       - HEARTBEAT_INTERVAL=60 # integer number of seconds
