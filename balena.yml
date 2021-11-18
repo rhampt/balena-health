@@ -15,7 +15,7 @@ assets:
     type: blob.asset
     data:
       url: >-
-        https://raw.githubusercontent.com/rhampt/balena-health/master/images/logo.png
+        https://raw.githubusercontent.com/rhampt/balena-health/main/images/logo.png
 data:
   applicationEnvironmentVariables:
     - SIMULATION_MODE: false
