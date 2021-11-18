@@ -3,6 +3,9 @@ type: sw.application
 description: >-
   Build a heart rate monitor with your Raspberry Pi.
 joinable: false
+post-provisioning: >-
+  ## Usage instructions
+  Check out the [balenaHealth GitHub repo](https://github.com/rhampt/balena-health/README.md).
 assets:
   repository:
     type: blob.asset
@@ -11,11 +14,12 @@ assets:
   logo:
     type: blob.asset
     data:
-      url: https://github.com/rhampt/balena-health/blob/main/images/logo.png
+      url: >-
+        https://raw.githubusercontent.com/rhampt/balena-health/master/images/logo.png
 data:
   applicationEnvironmentVariables:
     - SIMULATION_MODE: false
-    - BPM_THRESHOLD: 75
+    - BPM_THRESHOLD: 70
     - BUZZER_ALARM: true
     - HEARTBEAT_INTERVAL: 60
     - MQTT_RETRY_PERIOD: 30
@@ -26,5 +30,3 @@ data:
   supportedDeviceTypes:
     - raspberrypi4-64
     - raspberrypi3
-
-version: 1.0.0
