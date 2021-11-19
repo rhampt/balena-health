@@ -4,7 +4,7 @@ description: >-
   Build a heart rate monitoring solution with your Raspberry Pi.
 joinable: false
 post-provisioning: >-
-  Check out the [balenaHealth GitHub repo's Readme](https://github.com/rhampt/balena-health/README.md).
+  Check out the [balenaHealth GitHub repo's Readme](https://github.com/rhampt/balena-health/blob/main/README.md).
 assets:
   repository:
     type: blob.asset
