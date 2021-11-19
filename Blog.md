@@ -16,11 +16,20 @@ This solution allows you to monitor real-time and historical heart rate data whi
 
 Your desktop RPi application will update the attached E-Ink display every 30 seconds (configurable) with your latest heart rate. If your heart rate reaches a configurable threshold, a sunset image will show on the E-Ink display, reminding you to take some deep breaths. You can also configure a small buzzing sound as an audio cue. This reminder to breathe will hopefully lower your heart rate and reduce your stress levels.
 
+# Project Highlights
+
+- Simulation mode for those wishing to test without purchasing hardware
+- Supports any Low-Energy Bluetooth (BLE) heart rate monitor that conforms to Bluetooth SIG's [Service Schema](https://www.bluetooth.com/wp-content/uploads/Sitecore-Media-Library/Gatt/Xml/Services/org.bluetooth.service.heart_rate.xml).
+- Specifically tested with the [Polar H10](https://www.polar.com/us-en/products/accessories/h10_heart_rate_sensor) BLE heart rate device.
+- Include a time-series graph over a persisting database to see heart rate over time (InfluxDB -> Grafana)
+- Shows heart rate on an attached E-Ink display
+- Configured visual and audio indicator when you heart rate exceeds a certain threshold
+
 # Contents
 
 - [Motivation](#motivation)
-- [Contents](#contents)
 - [Project Highlights](#project-highlights)
+- [Contents](#contents)
 - [Getting Started](#getting-started)
   - [Supported Devices](#supported-devices)
   - [Equipment](#equipment)
@@ -43,15 +52,6 @@ Your desktop RPi application will update the attached E-Ink display every 30 sec
     - [`dashboard` service](#dashboard-service)
 - [Next Steps](#next-steps)
 
-# Project Highlights
-
-- Supports any Low-Energy Bluetooth (BLE) heart rate monitor that conforms to Bluetooth SIG's [Service Schema](https://www.bluetooth.com/wp-content/uploads/Sitecore-Media-Library/Gatt/Xml/Services/org.bluetooth.service.heart_rate.xml).
-- Specifically tested with the [Polar H10](https://www.polar.com/us-en/products/accessories/h10_heart_rate_sensor) BLE heart rate device.
-- Include a time-series graph (InfluxDB -> Grafana) to see heart rate over time
-- Shows heart rate on an attached E-Ink display
-- Configured visual and audio indicator when you heart rate exceeds a certain threshold
-- Simulation mode for those wishing to test without purchasing hardware!
-
 # Getting Started
 
 ## Supported Devices
@@ -63,7 +63,7 @@ BalenaHealth has been tested on the following devices:
 | Raspberry Pi 3b+ | ✔      |
 | Raspberry Pi 4   | ✔      |
 
-It may support others!
+It may support others—please let me know if you test on another device!
 
 ## Equipment
 
@@ -91,7 +91,7 @@ Here are two images of the overall system in operation, one where my bpm is "nor
 
 ![System](images/System.png)
 
-**Note**: A helpful website for getting info on the BCM and pin mappings for the Raspberry Pi is [pinout.xyz](https://pinout.xyz/). All pin names mentioned are for the BCM mappings for the Raspberry Pi 4 as shown in this image:
+A helpful website for getting info on the BCM and pin mappings for the Raspberry Pi is [pinout.xyz](https://pinout.xyz/). All pin names mentioned are for the BCM mappings for the Raspberry Pi 4 as shown in this image:
 
 ![Pinout](images/RPi_4_Pinout.jpg)
 
@@ -132,7 +132,7 @@ Alright, now that you you've got your hardware configured, it's time to look at 
 
 If you are already a balena user it might be better for you to use this way. You can clone [the project](https://github.com/rhampt/balena-health/) from GitHub and use the [balena CLI](https://github.com/balena-io/balena-cli) to push the application to your device. This is the best option if you want to tinker with the project and have full control.
 
-The [Getting Started Guide](https://www.balena.io/docs/learn/getting-started/raspberrypi3/python/) covers this option. After you've created the application and pushed the code using the CLI, follow the steps below.
+The [Getting Started Guide](https://www.balena.io/docs/learn/getting-started/) covers this option. After you've created the application and pushed the code using the CLI, follow the steps below.
 
 ### The Easier Way
 
@@ -146,7 +146,7 @@ You should see a model popup that looks similar to this:
 
 You can name the application whatever you'd like. Push `Create and deploy` and you'll see a new application with that name show up in the dashboard.
 
-**Note:** If you don't have the hardware but still want to test the application, toggle `advanced` and set `SIMULATION_MODE` to `true`. If you have a heart rate sensor, make sure to set this value to `false` so that the proper code is used to poll for heart rate. Also, set the `H10_MAC_ADDR` variable to your heart rate devices' mac address. Check out the [Services and Configurations](#services-and-configurations) below for details on determining your sensors' mac address and other configuration options.
+If you don't have the hardware but still want to test the application, toggle `advanced` and set `SIMULATION_MODE` to `true`. If you have a heart rate sensor, make sure to set this value to `false` so that the proper code is used to poll for heart rate. Also, set the `H10_MAC_ADDR` variable to your heart rate devices' mac address. Check out the [Services and Configurations](#services-and-configurations) below for details on determining your sensors' mac address and other configuration options.
 
 Once your application has been created, you can set up and add a device within that application by clicking the `Add device` button. When you add a device, you specify your device type, and if you are connecting to a wireless network you can set your WiFI SSID and passphrase here too.
 
@@ -287,4 +287,4 @@ Go ahead and explore! There are many future adaptations that could be made to ex
 
 Please feel free to expand on balenaHealth and submit pull requests to the repo.
 
-I hope you enjoyed this project as much as I enjoyed developing it!
+I hope you enjoyed deploying this project as much as I did—see you next time!

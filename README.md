@@ -6,16 +6,24 @@ This is a balenaHub project that allows users to monitor their heart rate in rea
 
 [![balena deploy button](https://www.balena.io/deploy.svg)](https://dashboard.balena-cloud.com/deploy?repoUrl=https://github.com/rhampt/balena-health)
 
-Please follow along with my blog post here: TBD_LINK (markdown [here](Blog.md))
+Please follow along with my blog post[here](Blog.md).
 
 ## Highlights
 
+- Simulation mode for those wishing to test without purchasing hardware
 - Supports any Low-Energy Bluetooth (BLE) heart rate monitor that conforms to Bluetooth SIG's [Service Schema](https://www.bluetooth.com/wp-content/uploads/Sitecore-Media-Library/Gatt/Xml/Services/org.bluetooth.service.heart_rate.xml).
 - Specifically tested with the [Polar H10](https://www.polar.com/us-en/products/accessories/h10_heart_rate_sensor) BLE heart rate device.
-- Include a time-series graph (InfluxDB -> Grafana) to see heart rate over time
+- Include a time-series graph over a persisting database to see heart rate over time (InfluxDB -> Grafana)
 - Shows heart rate on an attached E-Ink display
 - Configured visual and audio indicator when you heart rate exceeds a certain threshold
-- Simulation mode for those wishing to test without purchasing hardware!
+
+## Motivation
+
+We can all agree that mental health is extremely important. The goal of BalenaHealth is to create DIY solutions for improving your mental well-being. In this initial version, the project is used for monitoring your heart rate while working to gauge stress levels and decrease them over time.
+
+This solution allows you to monitor real-time and historical heart rate data while working. It will continually measure and display your heart rate on the locally connected screen. The wireless heart rate sensor communicates real-time to a Raspberry Pi via Bluetooth. An InfluxDB time series database is kept on the device and your historical heart rate data is presented by Grafana via a URL. This will help you spot trends and determine if this method of reducing stress actually works.
+
+Your desktop RPi application will update the attached E-Ink display every 30 seconds (configurable) with your latest heart rate. If your heart rate reaches a configurable threshold, a sunset image will show on the E-Ink display, reminding you to take some deep breaths. You can also configure a small buzzing sound as an audio cue. This reminder to breathe will hopefully lower your heart rate and reduce your stress levels.
 
 ## Supported Devices
 
@@ -26,13 +34,7 @@ BalenaHealth has been tested on the following devices:
 | Raspberry Pi 3b+ | ✔      |
 | Raspberry Pi 4   | ✔      |
 
-## Motivation
-
-We can all agree that mental health is extremely important. The goal of BalenaHealth is to create DIY solutions for improving your mental well-being. In this initial version, the project is used for monitoring your heart rate while working to gauge stress levels and decrease them over time.
-
-This solution allows you to monitor real-time and historical heart rate data while working. It will continually measure and display your heart rate on the locally connected screen. The wireless heart rate sensor communicates real-time to a Raspberry Pi via Bluetooth. An InfluxDB time series database is kept on the device and your historical heart rate data is presented by Grafana via a URL. This will help you spot trends and determine if this method of reducing stress actually works.
-
-Your desktop RPi application will update the attached E-Ink display every 30 seconds (configurable) with your latest heart rate. If your heart rate reaches a configurable threshold, a sunset image will show on the E-Ink display, reminding you to take some deep breaths. You can also configure a small buzzing sound as an audio cue. This reminder to breathe will hopefully lower your heart rate and reduce your stress levels.
+It may support others—please let me know if you test on another device!
 
 ## Equipment
 

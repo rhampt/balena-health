@@ -34,16 +34,16 @@ Note that:
 - `subject`: The subject should contain a short description of the change. Use the imperative, present tense.
 - `body`: A detailed description of changes being made and reasoning if necessary. This may contain several paragraphs.
 - `Connects-to`: If your commit fixes or is connected to an existing issue, link it by adding this tag with `#issue-number`. Example: `Connects-to: #123`
-- `Change-type`: At least one of your commits on a PR needs to have this tag. You have the flexibility, and it's good practise, to use this tag in as many commits as you see fit; in the end, the resulting change type for the scope of the PR will be folded down to the biggest one as marked in the commits (`major>minor>patch`). Our version numbering adheres to [Semantic Versioning](http://semver.org/).
+- `Change-type`: At least one of your commits on a PR needs to have this tag. You have the flexibility, and it's good practice, to use this tag in as many commits as you see fit; in the end, the resulting change type for the scope of the PR will be folded down to the biggest one as marked in the commits (`major>minor>patch`). Our version numbering adheres to [Semantic Versioning](http://semver.org/).
 - `Signed-off-by`: Sign your commits by providing your full name and email address in the format: `Name Surname <email@something.com>`. _This is an optional tag, but helpful if you want us to know how to keep in touch._
 
 ### Commit examples
 
 Here are some examples of valid commits:
 
-**Big new feature**
+#### Big new feature
 
-```
+```text
 Adding new sensor
 
 This feature adds support for <brand new I2C-supported sensor>
@@ -59,9 +59,9 @@ Change-type: major
 Signed-off-by: Tomás Migone <tomas@balena.io>
 ```
 
-**Simple change**
+#### Simple change
 
-```
+```text
 Fixed supported sensor table
 
 * Added support for Brand New Sensor, so I added it and a link to the table
@@ -69,9 +69,9 @@ Fixed supported sensor table
 Change-type: patch
 ```
 
-**Fix an issue**
+#### Fix an issue
 
-```
+```text
 Fix supported sensor links
 
 Change-type: patch
@@ -93,7 +93,7 @@ The PR will only be able to be merged only after:
 
 If your PR contains multiple commits you might be asked to rebase your PR branch on top of the latest `master` and squash your commits before merging. This can be achieved with the following steps, assuming that the current branch is that to be merged to master in your local file system:
 
-```
+```bash
 git checkout master
 git pull
 git checkout your-branch
@@ -102,7 +102,7 @@ git rebase -i master
 
 At this point `git rebase` will prompt you to choose an action for each commit and resolve any conflicts. You should `pick` one commit, `reword` it if necessary and `squash` the rest. The reason behind using rebase is that it makes for tidier git branching history. Push the rebased PR branch to the remote and you should be good to go:
 
-```
+```bash
 git push --force-with-lease origin your-branch
 ```
 
