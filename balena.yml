@@ -1,11 +1,10 @@
 name: balenaHealth
 type: sw.application
 description: >-
-  Build a heart rate monitor with your Raspberry Pi.
+  Build a heart rate monitoring solution with your Raspberry Pi.
 joinable: false
 post-provisioning: >-
-  ## Usage instructions
-  Check out the [balenaHealth GitHub repo](https://github.com/rhampt/balena-health/README.md).
+  Check out the [balenaHealth GitHub repo's Readme](https://github.com/rhampt/balena-health/README.md).
 assets:
   repository:
     type: blob.asset
