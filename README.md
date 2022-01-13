@@ -6,7 +6,7 @@ This is a balenaHub project that allows users to monitor their heart rate in rea
 
 [![balena deploy button](https://www.balena.io/deploy.svg)](https://dashboard.balena-cloud.com/deploy?repoUrl=https://github.com/rhampt/balena-health)
 
-Please follow along with my blog post here: <Link TBD>
+Please follow along with my blog post [here](https://www.balena.io/blog/build-heartrate-monitor-using-raspberry-pi-and-balena/). 
 
 ## Highlights
 
